@@ -1,0 +1,113 @@
+/* get max speed and min speed of bike*/
+
+create external table bike_speed (week string, hour string, weather_type string, speed float)
+                 row format delimited fields terminated by ','
+                 location '/user/cloudera/impalainput/speed';
+
+select w.week, w.hour, w.min_speed, bike_speed.weather_type from bike_speed,(select week,hour, min(speed) as min_speed from bike_speed where weather_type <> 'NA' group by week,hour)w where w.min_speed = bike_speed.speed;
+select w.week, w.hour, w.max_speed, bike_speed.weather_type from bike_speed,(select week,hour, max(speed) as max_speed from bike_speed where weather_type <> 'NA' group by week,hour)w where w.max_speed = bike_speed.speed;
++---------+------+-------------------+--------------+
+| week    | hour | max_speed         | weather_type |
++---------+------+-------------------+--------------+
+| weekday | 00   | 3.207795381546021 | Moderate     |
+| weekday | 01   | 3.052448272705078 | Light        |
+| weekday | 02   | 3.91266942024231  | Heavy        |
+| weekday | 03   | 3.394527673721313 | Light        |
+| weekday | 04   | 3.371582746505737 | Cloudy       |
+| weekday | 05   | 3.709020853042603 | Clear        |
+| weekday | 06   | 3.66987156867981  | Clear        |
+| weekday | 07   | 3.627548694610596 | Clear        |
+| weekday | 08   | 3.509334802627563 | Clear        |
+| weekday | 09   | 3.235854387283325 | Light        |
+| weekday | 10   | 2.847042322158813 | Clear        |
+| weekday | 11   | 2.634003400802612 | Cloudy       |
+| weekday | 12   | 2.494174957275391 | Clear        |
+| weekday | 13   | 2.516039371490479 | Cloudy       |
+| weekday | 14   | 2.65335750579834  | Cloudy       |
+| weekday | 15   | 2.842171669006348 | Moderate     |
+| weekday | 16   | 3.005544424057007 | Clear        |
+| weekday | 17   | 3.255586862564087 | Clear        |
+| weekday | 18   | 3.200790166854858 | Clear        |
+| weekday | 19   | 3.052869081497192 | Clear        |
+| weekday | 20   | 2.974237203598022 | Clear        |
+| weekday | 21   | 3.215471982955933 | Snow         |
+| weekday | 22   | 3.022931575775146 | Clear        |
+| weekday | 23   | 3.187903642654419 | Moderate     |
+| weekend | 00   | 3.562274932861328 | Moderate     |
+| weekend | 01   | 3.117714166641235 | Moderate     |
+| weekend | 02   | 2.540982007980347 | Light        |
+| weekend | 03   | 2.820833683013916 | Cloudy       |
+| weekend | 04   | 3.049882888793945 | Light        |
+| weekend | 05   | 3.54339599609375  | Light        |
+| weekend | 06   | 3.397749662399292 | Clear        |
+| weekend | 07   | 3.453898191452026 | Moderate     |
+| weekend | 08   | 2.992239952087402 | Clear        |
+| weekend | 09   | 2.912145376205444 | Clear        |
+| weekend | 10   | 2.827638387680054 | Clear        |
+| weekend | 11   | 2.754530668258667 | Clear        |
+| weekend | 12   | 2.722538471221924 | Clear        |
+| weekend | 13   | 2.705886602401733 | Cloudy       |
+| weekend | 14   | 2.674135684967041 | Clear        |
+| weekend | 15   | 2.846419334411621 | Moderate     |
+| weekend | 16   | 2.663493871688843 | Clear        |
+| weekend | 17   | 2.672272205352783 | Clear        |
+| weekend | 18   | 2.707820892333984 | Clear        |
+| weekend | 19   | 2.725817918777466 | Clear        |
+| weekend | 20   | 2.722842693328857 | Clear        |
+| weekend | 21   | 2.846047639846802 | Snow         |
+| weekend | 22   | 2.902979612350464 | Clear        |
+| weekend | 23   | 3.024752378463745 | Clear        |
++---------+------+-------------------+--------------+
++---------+------+--------------------+--------------+
+| week    | hour | min_speed          | weather_type |
++---------+------+--------------------+--------------+
+| weekday | 00   | 1.680077910423279  | Snow         |
+| weekday | 01   | 2.248830556869507  | Snow         |
+| weekday | 02   | 1.390114307403564  | Snow         |
+| weekday | 03   | 2.049917221069336  | Moderate     |
+| weekday | 04   | 1.536922693252563  | Snow         |
+| weekday | 05   | 2.518102645874023  | Moderate     |
+| weekday | 06   | 2.725221157073975  | Snow         |
+| weekday | 07   | 2.665905237197876  | Snow         |
+| weekday | 08   | 2.810304164886475  | Snow         |
+| weekday | 09   | 2.894330263137817  | Snow         |
+| weekday | 10   | 2.283186674118042  | Snow         |
+| weekday | 11   | 2.34157133102417   | Snow         |
+| weekday | 12   | 2.140494585037231  | Snow         |
+| weekday | 13   | 2.080264329910278  | Snow         |
+| weekday | 14   | 2.091041088104248  | Snow         |
+| weekday | 15   | 2.314418077468872  | Snow         |
+| weekday | 16   | 2.324198961257935  | Snow         |
+| weekday | 17   | 2.369474411010742  | Snow         |
+| weekday | 18   | 2.660777568817139  | Snow         |
+| weekday | 19   | 2.515921592712402  | Snow         |
+| weekday | 20   | 2.303500652313232  | Snow         |
+| weekday | 21   | 2.731818675994873  | Moderate     |
+| weekday | 22   | 1.432226538658142  | Snow         |
+| weekday | 23   | 2.592732906341553  | Snow         |
+| weekend | 00   | 2.777799844741821  | Light        |
+| weekend | 01   | 2.762737512588501  | Light        |
+| weekend | 02   | 1.785066723823547  | Snow         |
+| weekend | 03   | 1.930089950561523  | Snow         |
+| weekend | 04   | 2.483854532241821  | Snow         |
+| weekend | 05   | 0.8405044078826904 | Snow         |
+| weekend | 06   | 2.625244140625     | Snow         |
+| weekend | 07   | 3.223291158676147  | Light        |
+| weekend | 08   | 2.532950878143311  | Light        |
+| weekend | 09   | 2.68498158454895   | Light        |
+| weekend | 10   | 2.433247566223145  | Light        |
+| weekend | 11   | 2.225224256515503  | Moderate     |
+| weekend | 12   | 2.299455404281616  | Light        |
+| weekend | 13   | 2.432156324386597  | Snow         |
+| weekend | 14   | 2.16877555847168   | Heavy        |
+| weekend | 15   | 1.987183094024658  | Snow         |
+| weekend | 16   | 1.727866888046265  | Moderate     |
+| weekend | 17   | 1.86781108379364   | Snow         |
+| weekend | 18   | 1.770602226257324  | Snow         |
+| weekend | 19   | 1.918920159339905  | Snow         |
+| weekend | 20   | 1.665635228157043  | Snow         |
+| weekend | 21   | 2.065498828887939  | Light        |
+| weekend | 22   | 2.608053922653198  | Moderate     |
+| weekend | 23   | 2.716363191604614  | Snow         |
++---------+------+--------------------+--------------+
+
